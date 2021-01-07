@@ -1,21 +1,19 @@
-import React, { useEffect, useState, } from "react";
+import React from "react";
 import './App.css';
-import binData from "./exampledata.json";
 import './BinDataFunctions.js';
-import brownBinIcon from "./Images/BrownBin.jpg";
-import blackBinIcon from "./Images/BlackBin.jpg";
-import blueBinIcon from "./Images/BlueBin.jpg";
-import greenBinIcon from "./Images/GreenBin.jpg";
 import { Routes, Route } from 'react-router-dom';
-import { Form, BinData } from './pages';
+import { FutureCollections, Heading, Home, UserInfo, BinData } from './pages';
 
 
 function App() {
   return (
-  <div>
+  <div className="App">
+    <Heading />
     <Routes>
-      <Route path="/" element={<Form />}/>
+      <Route path="/" element={<Home />}/>
       <Route path="/CurrentCollection" element={<BinData />}/>
+      <Route path="/YourInfo" element={<UserInfo />}/>
+      <Route path="/FutureCollections" element={<FutureCollections />}/>
     </Routes>
   </div>);
 }

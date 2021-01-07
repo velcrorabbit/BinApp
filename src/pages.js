@@ -1,97 +1,97 @@
-import React, { useState }from "react";
+import React, { useReducer, useState } from "react";
+import { Link } from 'react-router-dom';
 import './App.css';
 import binData from "./exampledata.json";
-import './BinDataFunctions.js';
-import brownBinIcon from "./Images/BrownBin.jpg";
-import blackBinIcon from "./Images/BlackBin.jpg";
-import blueBinIcon from "./Images/BlueBin.jpg";
-import greenBinIcon from "./Images/GreenBin.jpg";
+import * as BinDataFunctions from './BinDataFunctions.js';
+import MCCLogo from "./Images/MCCLogo.PNG";
 
-export function Form(){
-
-    const [postcode, setPostcode] = useState("value from form when I work that out");
-    const [display, setDisplay] = useState(false)
- 
+export function Heading() {
     return (
-    <div>
-        <h1>Please enter your Postcode</h1>
-        <form name="PostCodeForm" onSubmit={(e) => { e.preventDefault(); setDisplay(true) }} >
-        <label for="postcode">Postcode:</label>
-        <input type="text" id="fPostcode" name="fPostcode" onChange={e => setPostcode(e.target.value)}></input>
-        <button type="submit">Go</button>
-        </form>
-        <p>{display && postcode}</p>
-    </div>
+        <div className="header">
+            <img src={MCCLogo} alt="Manchester City Council" />
+            <Link to="YourInfo">Settings</Link>
+        </div>
     );
 }
 
-function setBinCollection(binJSON) {
-
-    var binArray = [];
-    binJSON.data.collections.forEach(element => {
-      var binDate = new Date(element.next_date);
-      var binType = element.bin_type;
-      var binImage = getBinImage(binType)
-      var binObject = { type: binType, date: binDate, imageUrl: binImage };
-      binArray.push(binObject);
-    });
-  
-    binArray.sort(function (a, b) { return a.date - b.date });
-  
-    return binArray;
+export function Home() {
+    return (
+        <div>
+            {BinData()}
+        </div>
+    )
 }
 
-function getRowHTML(binArray) {
-
-    var rowDate = binArray[0].date;
-
-    return <>
-        <h2>Next bin collection on {binArray[0].date.getDate()}</h2>
-        {binArray.map(element => {
-        if (element.date.getDate() == rowDate.getDate()) {
-            return <img key={element.type} src={element.imageUrl} alt={element.type} height="100"/>
-        }
-        })}
-    </>
-
+const formReducer = (state, event) => {
+    return {
+        ...state,
+        [event.name]: event.value
+    }
 }
 
-function getBinImage(binType) {
+export function UserInfo() {
 
-    var imageLocation;
+    const [uprn, setUprn] = useState(null);
+    const [formData, setFormData] = useReducer(formReducer, {});
 
-    switch (binType) {
-        case "Blue Bin":
-        imageLocation = blueBinIcon
-        break;
-        case "Brown Bin":
-        imageLocation = brownBinIcon
-        break;
-        case "Green Bin":
-        imageLocation = greenBinIcon
-        break;
-        case "Black / Grey Bin":
-        imageLocation = blackBinIcon
-        break;
-        default:
-        break;
+    const handleChange = event => {
+        setFormData({
+            name: event.target.name,
+            value: event.target.value,
+        });
     }
 
-    return imageLocation;
+    return (
+        <div>
+            <h2>Your Location</h2>
+            <form name="settingsForm" onSubmit={(e) => console.log(e.target)}>
+                <label for="address">select Address:</label>
+                <select name="address" id="address" onChange={handleChange}>
+                    <option value="77074250">2, AVESON AVENUE, M21 8EY</option>
+                    <option value="3">3, AVESON AVENUE, M21 8EY</option>
+                </select>
+                <h2>Notifications</h2>
+                <input type="checkbox" id="notificationOn" name="notificationOn"></input>
+                <label for="notificationOn">Turn on notifications the day before your collection</label><br />
+                <input type="time" id="time" name="time"></input>
+                <label for="time">Time of notification</label><br />
+                <button type="submit">Save Changes</button>
+            </form>
+            <div>
+                You are submitting the following:
+                <ul>
+                    {Object.entries(formData).map(([name, value]) => (
+                        <li key={name}><strong>{name}</strong>:{value.toString()}</li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    );
 }
 
 export function BinData() {
     const [binJSON, setData] = useState(binData);
     //Production release will get the binJSON from the Biffa API call
+    //The UPRN will come from a GazOPs API lookup.
     //https://www.manchester.gov.uk/site/custom_scripts/bin_dates_gazops/index.php?uprn=000077074250
     if (binJSON) {
-        var binArray = setBinCollection(binJSON);
 
-        var HTML = getRowHTML(binArray);
+        var HTML = BinDataFunctions.getRowHTML(BinDataFunctions.setBinCollection(binJSON));
 
-        return <>{HTML}</>
+        return <>
+            {HTML}<br />
+            <Link to="FutureCollections">See future collections</Link>
+        </>
 
     }
-    return <div>No bins!</div>; 
+    return UserInfo();
+}
 
+export function FutureCollections() {
+    return (
+        <>
+            <h2>To Be Built</h2>
+            <p>This page will contain the next 3 collections after the current one.</p>
+        </>
+    );
 }
