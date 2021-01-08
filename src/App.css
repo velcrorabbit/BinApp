@@ -10,8 +10,20 @@
 h2 {
   background-color: #a62639;
   color: white;
+  text-align: center;
+  margin: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .bin-image {
-  padding: 5px;
+  padding: 10px;
+}
+
+ul, form {
+  text-align: left;
+}
+
+input, label, select, button {
+  margin-left: 5%;
 }

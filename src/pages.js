@@ -18,6 +18,7 @@ export function Home() {
     return (
         <div>
             {BinData()}
+            {ReportAnIssue()}
         </div>
     )
 }
@@ -43,9 +44,9 @@ export function UserInfo() {
 
     return (
         <div>
-            <h2>Your Location</h2>
             <form name="settingsForm" onSubmit={(e) => console.log(e.target)}>
-                <label for="address">select Address:</label>
+                <h2>Your Location</h2>
+                <label for="address">select Address:</label> <br />
                 <select name="address" id="address" onChange={handleChange}>
                     <option value="77074250">2, AVESON AVENUE, M21 8EY</option>
                     <option value="3">3, AVESON AVENUE, M21 8EY</option>
@@ -57,14 +58,6 @@ export function UserInfo() {
                 <label for="time">Time of notification</label><br />
                 <button type="submit">Save Changes</button>
             </form>
-            <div>
-                You are submitting the following:
-                <ul>
-                    {Object.entries(formData).map(([name, value]) => (
-                        <li key={name}><strong>{name}</strong>:{value.toString()}</li>
-                    ))}
-                </ul>
-            </div>
         </div>
     );
 }
@@ -76,7 +69,7 @@ export function BinData() {
     //https://www.manchester.gov.uk/site/custom_scripts/bin_dates_gazops/index.php?uprn=000077074250
     if (binJSON) {
 
-        var HTML = BinDataFunctions.getRowHTML(BinDataFunctions.setBinCollection(binJSON));
+        var HTML = BinDataFunctions.getFirstCollectionHTML(BinDataFunctions.setBinCollection(binJSON));
 
         return <>
             {HTML}<br />
@@ -88,10 +81,30 @@ export function BinData() {
 }
 
 export function FutureCollections() {
+    const [binJSON, setData] = useState(binData);
     return (
         <>
-            <h2>To Be Built</h2>
-            <p>This page will contain the next 3 collections after the current one.</p>
+            <h2>Future Collections</h2>
+            {BinDataFunctions.getFutureCollections(BinDataFunctions.setBinCollection(binJSON))}
         </>
     );
+}
+
+export function ReportAnIssue() {
+    return (
+        <div>
+            <h2>Report Something</h2>
+            <ul>
+                <li>
+                    <a href="https://www.manchester.gov.uk/info/200084/bins_rubbish_and_recycling/6479/report_a_problem_with_your_bin_collection">Problem with a collection</a>
+                </li>
+                <li>
+                    <a href="https://www.manchester.gov.uk/info/200084/bins_rubbish_and_recycling/6252/bin_missing_damaged_or_a_problem_with_a_collection">Missing Bin</a>
+                </li>
+                <li>
+                    <a href="https://secure.manchester.gov.uk/forms/form/1615/en/report_an_abandoned_bin">Abandoned Bin</a>
+                </li>
+            </ul>
+        </div>
+    )
 }
