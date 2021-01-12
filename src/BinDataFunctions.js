@@ -53,7 +53,7 @@ export function getArrayOfBinByDate(binArray) {
             if (bin.date === date) {
                 var binType = bin.type;
                 var binImage = bin.imageUrl;
-                var binObject = { type: binType, imageURL: binImage }
+                var binObject = { type: binType, imageUrl: binImage }
                 bins.push(binObject);
             }
         });
@@ -63,32 +63,23 @@ export function getArrayOfBinByDate(binArray) {
     });
     return binArrayByDate;
 }
-// can't get the images to work.
+
 export function getFutureCollections(binArray) {
 
-    var dateArray = getArrayOfDates(binArray).slice(1);
+    var futureArray = binArray.slice(1);
+
     return <>
-        {dateArray.map(binDay => {
+        {futureArray.map(binDay => {
             return <>
-                <h3>{binDay}</h3>
-                <div>{getRowHTML(binArray, binDay)}</div>
-            </>;
+                <h3>{binDay.date}</h3>
+                {binDay.bins.map(bin => {
+                    return <img className="bin-image" key={bin.type} src={bin.imageUrl} alt={bin.type} height="100" />;
+                })
+                }
+            </>
         })}
     </>
 }
-
-function getRowHTML(binArray, collectionDate) {
-    var collectionDay = binArray.find(({ date }) => date === collectionDate);
-    var binsForThatDay = collectionDay.bins;
-    binsForThatDay.forEach(bin => {
-        //console.log(getImageHTML(bin));
-        return <img className="bin-image" key={bin.type} src={bin.imageUrl} alt={bin.type} height="100" />;
-    });
-}
-
-// function getImageHTML(individualBin) {
-//     return <img className="bin-image" key={individualBin.type} src={individualBin.imageUrl} alt={individualBin.type} height="100" />
-// }
 
 // get the html for the first collection in the list that will display on the first page.
 export function getFirstCollectionHTML(binArray) {

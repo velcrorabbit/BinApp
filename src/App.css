@@ -16,14 +16,21 @@ h2 {
   padding-bottom: 5px;
 }
 
-.bin-image {
-  padding: 10px;
+h3 {
+  text-align: left;
+  margin: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 ul, form {
   text-align: left;
 }
 
-input, label, select, button {
+input, label, select, button, h3 {
   margin-left: 5%;
+}
+
+.bin-image {
+  padding: 10px;
 }

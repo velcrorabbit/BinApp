@@ -44,18 +44,19 @@ export function UserInfo() {
 
     return (
         <div>
-            <form name="settingsForm" onSubmit={(e) => console.log(e.target)}>
-                <h2>Your Location</h2>
-                <label for="address">select Address:</label> <br />
+            <h2>Settings</h2>
+            <form name="settingsForm" onSubmit={(e) => {setUprn(formData.address); e.preventDefault();}}>
+                <h3>Your Location</h3>
+                <label htmlFor="address">select Address:</label> <br />
                 <select name="address" id="address" onChange={handleChange}>
                     <option value="77074250">2, AVESON AVENUE, M21 8EY</option>
                     <option value="3">3, AVESON AVENUE, M21 8EY</option>
                 </select>
-                <h2>Notifications</h2>
+                <h3>Notifications</h3>
                 <input type="checkbox" id="notificationOn" name="notificationOn"></input>
-                <label for="notificationOn">Turn on notifications the day before your collection</label><br />
+                <label htmlFor="notificationOn">Turn on notifications the day before your collection</label><br />
                 <input type="time" id="time" name="time"></input>
-                <label for="time">Time of notification</label><br />
+                <label htmlFor="time">Time of notification</label><br />
                 <button type="submit">Save Changes</button>
             </form>
         </div>
