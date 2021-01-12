@@ -12,9 +12,17 @@ export function setBinCollection(binJSON) {
         var binImage = getBinImage(binType)
         var binObject = { type: binType, date: binDate, imageUrl: binImage };
         binArray.push(binObject);
+        var binDate = new Date(element.further_dates[0]);
+        var binObject2 = { type: binType, date: binDate, imageUrl: binImage };
+        binArray.push(binObject2);
+        var binDate = new Date(element.further_dates[1]);
+        var binObject3 = { type: binType, date: binDate, imageUrl: binImage };
+        binArray.push(binObject3);
     });
 
-    binArray.sort(function (a, b) { return a.date - b.date });
+    binArray.sort((a, b) => {
+        return a.date - b.date;
+    })
 
     binArray.forEach(element => {
         element.date = getLongDate(element.date);
@@ -23,9 +31,9 @@ export function setBinCollection(binJSON) {
     return binArray;
 }
 
+// get an array of just the unique bin collection days
 function getArrayOfDates(binArray) {
     var binDates = [];
-    binDates.push(binArray[0].date);
     binArray.forEach(element => {
         if (!binDates.includes(element.date)) {
             binDates.push(element.date);
@@ -34,45 +42,55 @@ function getArrayOfDates(binArray) {
     return binDates;
 }
 
-// function createBinRowsObject(binArray){
+// create an array of bin dates with each bin collected on that date as an object in a nested array.
+export function getArrayOfBinByDate(binArray) {
+    var dateArray = getArrayOfDates(binArray);
+    var binArrayByDate = [];
+    dateArray.forEach(date => {
+        var date = date;
+        var bins = [];
+        binArray.forEach(bin => {
+            if (bin.date === date) {
+                var binType = bin.type;
+                var binImage = bin.imageUrl;
+                var binObject = { type: binType, imageURL: binImage }
+                bins.push(binObject);
+            }
+        });
+        var rowObject = { date: date, bins: bins };
+        binArrayByDate.push(rowObject);
 
-// }
-
-// function addBinsToDate(binArray, date){
-//     var collectionDate = date;
-//     var binObjectArray = [];
-//     var binObject =  { type: binType, imageUrl: binImage };
-//     binArray.forEach(element => {
-//         if (element.date.getDate() === collectionDate){
-//             binObject = {type, imageUrl};
-//             binObjectArray.push(binObject);
-//         }
-//     });
-// }
-
+    });
+    return binArrayByDate;
+}
+// can't get the images to work.
 export function getFutureCollections(binArray) {
-    var rowDate = getArrayOfDates(binArray)[1];
+
+    var dateArray = getArrayOfDates(binArray).slice(1);
     return <>
-        <h3>{rowDate}</h3>
-        {binArray.map(element => {
-            if (element.date === rowDate) {
-                return <img className="bin-image" key={element.type} src={element.imageUrl} alt={element.type} height="100" />
-            }
+        {dateArray.map(binDay => {
+            return <>
+                <h3>{binDay}</h3>
+                <div>{getRowHTML(binArray, binDay)}</div>
+            </>;
         })}
     </>
 }
 
-function getRowHTML(binArray, rowDate) {
-    return <>
-        <h3>{rowDate}</h3>
-        {binArray.map(element => {
-            if (element.date === rowDate) {
-                return <img className="bin-image" key={element.type} src={element.imageUrl} alt={element.type} height="100" />
-            }
-        })}
-    </>
+function getRowHTML(binArray, collectionDate) {
+    var collectionDay = binArray.find(({ date }) => date === collectionDate);
+    var binsForThatDay = collectionDay.bins;
+    binsForThatDay.forEach(bin => {
+        //console.log(getImageHTML(bin));
+        return <img className="bin-image" key={bin.type} src={bin.imageUrl} alt={bin.type} height="100" />;
+    });
 }
 
+// function getImageHTML(individualBin) {
+//     return <img className="bin-image" key={individualBin.type} src={individualBin.imageUrl} alt={individualBin.type} height="100" />
+// }
+
+// get the html for the first collection in the list that will display on the first page.
 export function getFirstCollectionHTML(binArray) {
 
     var rowDate = binArray[0].date;
@@ -88,6 +106,7 @@ export function getFirstCollectionHTML(binArray) {
 
 }
 
+// change the date object into a more human-readable format
 function getLongDate(date) {
 
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -98,6 +117,7 @@ function getLongDate(date) {
 
 }
 
+// get the locations of the image for each bin
 function getBinImage(binType) {
 
     var imageLocation;

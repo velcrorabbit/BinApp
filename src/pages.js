@@ -1,14 +1,14 @@
 import React, { useReducer, useState } from "react";
 import { Link } from 'react-router-dom';
 import './App.css';
-import binData from "./exampledata.json";
+import binData from "./BinData/77074250.json";
 import * as BinDataFunctions from './BinDataFunctions.js';
 import MCCLogo from "./Images/MCCLogo.PNG";
 
 export function Heading() {
     return (
         <div className="header">
-            <img src={MCCLogo} alt="Manchester City Council" />
+            <Link to="./"><img src={MCCLogo} alt="Manchester City Council" /></Link>
             <Link to="YourInfo">Settings</Link>
         </div>
     );
@@ -85,7 +85,7 @@ export function FutureCollections() {
     return (
         <>
             <h2>Future Collections</h2>
-            {BinDataFunctions.getFutureCollections(BinDataFunctions.setBinCollection(binJSON))}
+            {BinDataFunctions.getFutureCollections(BinDataFunctions.getArrayOfBinByDate(BinDataFunctions.setBinCollection(binJSON)))}
         </>
     );
 }
