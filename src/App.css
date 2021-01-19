@@ -1,5 +1,7 @@
+/* Font is specific to MCC, need to host internally to access */
 .App {
   text-align: center;
+  font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
 }
 
 .header {
@@ -14,6 +16,7 @@ h2 {
   margin: 0;
   padding-top: 5px;
   padding-bottom: 5px;
+  font-weight: normal;
 }
 
 h3 {
@@ -21,6 +24,7 @@ h3 {
   margin: 0;
   padding-top: 5px;
   padding-bottom: 5px;
+  font-weight: normal ;
 }
 
 ul, form {

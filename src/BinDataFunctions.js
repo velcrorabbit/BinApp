@@ -3,21 +3,19 @@ import blackBinIcon from "./Images/BlackBin.jpg";
 import blueBinIcon from "./Images/BlueBin.jpg";
 import greenBinIcon from "./Images/GreenBin.jpg";
 
+// get the needed bin data from the JSON Biffa has provided.
 export function setBinCollection(binJSON) {
 
     var binArray = [];
     binJSON.data.collections.forEach(element => {
-        var binDate = new Date(element.next_date);
+        
         var binType = element.bin_type;
         var binImage = getBinImage(binType)
-        var binObject = { type: binType, date: binDate, imageUrl: binImage };
-        binArray.push(binObject);
-        var binDate = new Date(element.further_dates[0]);
-        var binObject2 = { type: binType, date: binDate, imageUrl: binImage };
-        binArray.push(binObject2);
-        var binDate = new Date(element.further_dates[1]);
-        var binObject3 = { type: binType, date: binDate, imageUrl: binImage };
-        binArray.push(binObject3);
+        var dates = [new Date(element.next_date), new Date(element.further_dates[0]), new Date(element.further_dates[1])];
+        dates.forEach(date => {
+            var binObject = { type: binType, date: date, imageUrl: binImage };
+            binArray.push(binObject);
+        });
     });
 
     binArray.sort((a, b) => {
