@@ -1,7 +1,7 @@
 import React, { useReducer, useState } from "react";
 import { Link } from 'react-router-dom';
 import './App.css';
-import binData from "./BinData/77086475.json";
+import binData from "./BinData/testData.json";
 import * as BinDataFunctions from './BinDataFunctions.js';
 import MCCLogo from "./Images/MCCLogo.PNG";
 
@@ -15,12 +15,20 @@ export function Heading() {
 }
 
 export function Home() {
-    return (
-        <div>
-            {BinData()}
-            {ReportAnIssue()}
-        </div>
-    )
+    if(binData===null){
+        return (
+            <div>
+                {UserInfo()}
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                {BinData()}
+                {ReportAnIssue()}
+            </div>
+        )
+    }
 }
 
 const formReducer = (state, event) => {
