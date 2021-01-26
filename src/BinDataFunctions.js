@@ -4,29 +4,38 @@ import blueBinIcon from "./Images/BlueBin.jpg";
 import greenBinIcon from "./Images/GreenBin.jpg";
 
 // get the needed bin data from the JSON Biffa has provided.
-export function setBinCollection(binJSON) {
+export function setBinCollection(binJSON, uprn) {
 
     var binArray = [];
-    binJSON.data.collections.forEach(element => {
-        
-        var binType = element.bin_type;
-        var binImage = getBinImage(binType)
-        var dates = [new Date(element.next_date), new Date(element.further_dates[0]), new Date(element.further_dates[1])];
-        dates.forEach(date => {
-            var binObject = { type: binType, date: date, imageUrl: binImage };
-            binArray.push(binObject);
+    var locationObject = null;
+
+    binJSON.forEach(location => {
+        if (location["uprn"] == uprn){
+            locationObject = location;
+        }
+    });
+    if (locationObject){
+        locationObject.data.data.collections.forEach(element => {
+
+            var binType = element.bin_type;
+            var binImage = getBinImage(binType)
+            var dates = [new Date(element.next_date), new Date(element.further_dates[0]), new Date(element.further_dates[1])];
+            dates.forEach(date => {
+                var binObject = { type: binType, date: date, imageUrl: binImage };
+                binArray.push(binObject);
+            });
         });
-    });
 
-    binArray.sort((a, b) => {
-        return a.date - b.date;
-    })
+        binArray.sort((a, b) => {
+            return a.date - b.date;
+        })
 
-    binArray.forEach(element => {
-        element.date = getLongDate(element.date);
-    });
+        binArray.forEach(element => {
+            element.date = getLongDate(element.date);
+        });
 
-    return binArray;
+        return binArray;
+    }
 }
 
 // get an array of just the unique bin collection days
@@ -45,7 +54,6 @@ export function getArrayOfBinByDate(binArray) {
     var dateArray = getArrayOfDates(binArray);
     var binArrayByDate = [];
     dateArray.forEach(date => {
-        var date = date;
         var bins = [];
         binArray.forEach(bin => {
             if (bin.date === date) {
@@ -68,13 +76,13 @@ export function getFutureCollections(binArray) {
 
     return <>
         {futureArray.map(binDay => {
-            return <>
+            return <div key={binDay.date}>
                 <h3>{binDay.date}</h3>
                 {binDay.bins.map(bin => {
                     return <img className="bin-image" key={bin.type} src={bin.imageUrl} alt={bin.type} height="100" />;
                 })
                 }
-            </>
+            </div>
         })}
     </>
 }
@@ -89,6 +97,8 @@ export function getFirstCollectionHTML(binArray) {
         {binArray.map(element => {
             if (element.date === rowDate) {
                 return <img className="bin-image" key={element.type} src={element.imageUrl} alt={element.type} height="100" />
+            } else {
+                return null;
             }
         })}
     </>

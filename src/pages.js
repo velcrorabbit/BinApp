@@ -15,16 +15,20 @@ export function Heading() {
 }
 
 export function Home() {
-    if(binData===null){
+
+    const [uprn, setUprn] = useState();
+    const [formData, setFormData] = useReducer(formReducer, {});
+    
+    if (uprn === null || uprn === undefined) {
         return (
             <div>
-                {UserInfo()}
+                {UserInfo(setUprn, formData, setFormData)}
             </div>
         )
     } else {
         return (
             <div>
-                {BinData()}
+                {BinData(uprn)}
                 {ReportAnIssue()}
             </div>
         )
@@ -38,10 +42,7 @@ const formReducer = (state, event) => {
     }
 }
 
-export function UserInfo() {
-
-    const [uprn, setUprn] = useState(null);
-    const [formData, setFormData] = useReducer(formReducer, {});
+export function UserInfo(updateUprn, formData, setFormData) {
 
     const handleChange = event => {
         setFormData({
@@ -53,7 +54,7 @@ export function UserInfo() {
     return (
         <div>
             <h2>Settings</h2>
-            <form name="settingsForm" onSubmit={(e) => {setUprn(formData.address); e.preventDefault();}}>
+            <form name="settingsForm" onSubmit={(e) => { updateUprn(formData.address); e.preventDefault(); }}>
                 <h3>Your Location</h3>
                 <label htmlFor="address">select Address:</label> <br />
                 <select name="address" id="address" onChange={handleChange}>
@@ -71,14 +72,15 @@ export function UserInfo() {
     );
 }
 
-export function BinData() {
-    const [binJSON, setData] = useState(binData);
+export function BinData(uprn) {
+
+    console.log(uprn);
     //Production release will get the binJSON from the Biffa API call
     //The UPRN will come from a GazOPs API lookup.
     //https://www.manchester.gov.uk/site/custom_scripts/bin_dates_gazops/index.php?uprn=000077074250
-    if (binJSON) {
+    if (uprn) {
 
-        var HTML = BinDataFunctions.getFirstCollectionHTML(BinDataFunctions.setBinCollection(binJSON));
+        var HTML = BinDataFunctions.getFirstCollectionHTML(BinDataFunctions.setBinCollection(binData, uprn));
 
         return <>
             {HTML}<br />
@@ -90,11 +92,10 @@ export function BinData() {
 }
 
 export function FutureCollections() {
-    const [binJSON, setData] = useState(binData);
     return (
         <>
             <h2>Future Collections</h2>
-            {BinDataFunctions.getFutureCollections(BinDataFunctions.getArrayOfBinByDate(BinDataFunctions.setBinCollection(binJSON)))}
+            {BinDataFunctions.getFutureCollections(BinDataFunctions.getArrayOfBinByDate(BinDataFunctions.setBinCollection(binData, 77074250)))}
         </>
     );
 }
