@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import './App.css';
 import binData from "./BinData/testData.json";
 import * as BinDataFunctions from './BinDataFunctions.js';
@@ -19,7 +19,7 @@ export function Home() {
     const [uprn, setUprn] = useState();
     const [formData, setFormData] = useReducer(formReducer, {});
     
-    if (uprn === null || uprn === undefined) {
+    if (uprn === undefined) {
         return (
             <div>
                 {UserInfo(setUprn, formData, setFormData)}
@@ -28,7 +28,8 @@ export function Home() {
     } else {
         return (
             <div>
-                {BinData(uprn)}
+                {BinData(uprn)}<br />
+                <Link to={`/FutureCollections?uprn=${uprn}`}>See future collections</Link><br />
                 {ReportAnIssue()}
             </div>
         )
@@ -58,8 +59,11 @@ export function UserInfo(updateUprn, formData, setFormData) {
                 <h3>Your Location</h3>
                 <label htmlFor="address">select Address:</label> <br />
                 <select name="address" id="address" onChange={handleChange}>
+                    <option value="0">None</option>
                     <option value="77074250">2, AVESON AVENUE, M21 8EY</option>
                     <option value="77086475">179, MANLEY ROAD, M21 0GY</option>
+                    <option value="77086906">374, WILBRAHAM ROAD, M21 0XA</option>
+                    <option value="10093073668">52, COLMORE DRIVE, M9 6EX</option>
                 </select>
                 <h3>Notifications</h3>
                 <input type="checkbox" id="notificationOn" name="notificationOn"></input>
@@ -74,7 +78,6 @@ export function UserInfo(updateUprn, formData, setFormData) {
 
 export function BinData(uprn) {
 
-    console.log(uprn);
     //Production release will get the binJSON from the Biffa API call
     //The UPRN will come from a GazOPs API lookup.
     //https://www.manchester.gov.uk/site/custom_scripts/bin_dates_gazops/index.php?uprn=000077074250
@@ -83,8 +86,7 @@ export function BinData(uprn) {
         var HTML = BinDataFunctions.getFirstCollectionHTML(BinDataFunctions.setBinCollection(binData, uprn));
 
         return <>
-            {HTML}<br />
-            <Link to="FutureCollections">See future collections</Link>
+            {HTML}
         </>
 
     }
@@ -92,10 +94,14 @@ export function BinData(uprn) {
 }
 
 export function FutureCollections() {
+
+    var {search} = useLocation();
+    var uprn = search.slice(6, search.length);
+
     return (
         <>
             <h2>Future Collections</h2>
-            {BinDataFunctions.getFutureCollections(BinDataFunctions.getArrayOfBinByDate(BinDataFunctions.setBinCollection(binData, 77074250)))}
+            {BinDataFunctions.getFutureCollections(BinDataFunctions.getArrayOfBinByDate(BinDataFunctions.setBinCollection(binData, uprn)))}
         </>
     );
 }

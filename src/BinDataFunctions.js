@@ -19,7 +19,10 @@ export function setBinCollection(binJSON, uprn) {
 
             var binType = element.bin_type;
             var binImage = getBinImage(binType)
-            var dates = [new Date(element.next_date), new Date(element.further_dates[0]), new Date(element.further_dates[1])];
+            var dates = [new Date(element.next_date), new Date(element.further_dates[0])]
+            if(element.further_dates[1]){
+                dates.push(new Date(element.further_dates[1]));
+            }
             dates.forEach(date => {
                 var binObject = { type: binType, date: date, imageUrl: binImage };
                 binArray.push(binObject);
@@ -34,6 +37,7 @@ export function setBinCollection(binJSON, uprn) {
             element.date = getLongDate(element.date);
         });
 
+        
         return binArray;
     }
 }
@@ -71,6 +75,8 @@ export function getArrayOfBinByDate(binArray) {
 }
 
 export function getFutureCollections(binArray) {
+    
+    console.log(binArray);
 
     var futureArray = binArray.slice(1);
 
