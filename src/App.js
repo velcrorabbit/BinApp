@@ -1,7 +1,7 @@
 import React from "react";
 import './App.css';
 import './BinDataFunctions.js';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Redirect } from 'react-router-dom';
 import { FutureCollections, Heading, Home, UserInfo, BinData } from './pages';
 
 

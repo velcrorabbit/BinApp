@@ -75,8 +75,6 @@ export function getArrayOfBinByDate(binArray) {
 }
 
 export function getFutureCollections(binArray) {
-    
-    console.log(binArray);
 
     var futureArray = binArray.slice(1);
 

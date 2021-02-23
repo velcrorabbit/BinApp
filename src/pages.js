@@ -1,7 +1,8 @@
-import React, { useReducer, useState } from "react";
-import { Link, useLocation, useParams } from 'react-router-dom';
+import React, { useReducer } from "react";
+import { Link, useLocation } from 'react-router-dom';
 import './App.css';
 import binData from "./BinData/testData.json";
+import addressData from "./BinData/addresses.json"
 import * as BinDataFunctions from './BinDataFunctions.js';
 import MCCLogo from "./Images/MCCLogo.PNG";
 
@@ -16,13 +17,13 @@ export function Heading() {
 
 export function Home() {
 
-    const [uprn, setUprn] = useState();
-    const [formData, setFormData] = useReducer(formReducer, {});
+    const uprn = localStorage.getItem('uprn');
     
-    if (uprn === undefined) {
+    console.log("Uprn at start: " + uprn);
+    if (uprn === "undefined") {
         return (
             <div>
-                {UserInfo(setUprn, formData, setFormData)}
+                <p>No bins found, please update your address in the settings</p>
             </div>
         )
     } else {
@@ -30,7 +31,8 @@ export function Home() {
             <div>
                 {BinData(uprn)}<br />
                 <Link to={`/FutureCollections?uprn=${uprn}`}>See future collections</Link><br />
-                {ReportAnIssue()}
+                {ReportAnIssue()}<br />
+                {recycling()}
             </div>
         )
     }
@@ -43,7 +45,9 @@ const formReducer = (state, event) => {
     }
 }
 
-export function UserInfo(updateUprn, formData, setFormData) {
+export function UserInfo() {
+
+    const [formData, setFormData] = useReducer(formReducer, {});
 
     const handleChange = event => {
         setFormData({
@@ -52,18 +56,16 @@ export function UserInfo(updateUprn, formData, setFormData) {
         });
     }
 
+    console.log("local storage:" + localStorage.getItem('uprn'));
+
     return (
         <div>
             <h2>Settings</h2>
-            <form name="settingsForm" onSubmit={(e) => { updateUprn(formData.address); e.preventDefault(); }}>
+            <form name="settingsForm" onSubmit={(e) => { localStorage.setItem('uprn', formData.address); e.preventDefault(); }}>
                 <h3>Your Location</h3>
                 <label htmlFor="address">select Address:</label> <br />
                 <select name="address" id="address" onChange={handleChange}>
-                    <option value="0">None</option>
-                    <option value="77074250">2, AVESON AVENUE, M21 8EY</option>
-                    <option value="77086475">179, MANLEY ROAD, M21 0GY</option>
-                    <option value="77086906">374, WILBRAHAM ROAD, M21 0XA</option>
-                    <option value="10093073668">52, COLMORE DRIVE, M9 6EX</option>
+                {displayAddressOptions(addressData)}
                 </select>
                 <h3>Notifications</h3>
                 <input type="checkbox" id="notificationOn" name="notificationOn"></input>
@@ -74,6 +76,20 @@ export function UserInfo(updateUprn, formData, setFormData) {
             </form>
         </div>
     );
+}
+
+function displayAddressOptions(addressData){
+    console.log(addressData);
+    return <>
+        {addressData.map(address => {
+            console.log(address.address);
+            if (address.uprn == localStorage.getItem('uprn')) {
+                return <option value={address.uprn} selected>{address.address}</option>
+            } else {
+                return <option value={address.uprn}>{address.address}</option>;
+            }
+        })}
+    </>
 }
 
 export function BinData(uprn) {
@@ -121,6 +137,15 @@ export function ReportAnIssue() {
                     <a href="https://secure.manchester.gov.uk/forms/form/1615/en/report_an_abandoned_bin">Abandoned Bin</a>
                 </li>
             </ul>
+        </div>
+    )
+}
+
+export function recycling() {
+    return (
+        <div>
+            <h2>What goes in each bin?</h2>
+            <a href="https://www.manchester.gov.uk/info/200084/bins_rubbish_and_recycling/6026/see_which_recycling_bin_to_use">See which recycling bin to use</a>
         </div>
     )
 }
