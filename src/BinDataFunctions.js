@@ -10,23 +10,24 @@ export function setBinCollection(binJSON, uprn) {
     var locationObject = null;
 
     binJSON.forEach(location => {
-        if (location["uprn"] == uprn){
+        if (location["uprn"] == uprn) {
             locationObject = location;
         }
     });
-    if (locationObject){
+    if (locationObject) {
         locationObject.data.data.collections.forEach(element => {
-
-            var binType = element.bin_type;
-            var binImage = getBinImage(binType)
-            var dates = [new Date(element.next_date), new Date(element.further_dates[0])]
-            if(element.further_dates[1]){
-                dates.push(new Date(element.further_dates[1]));
+            if (element.communal_service === "false") {
+                var binType = element.bin_type;
+                var binImage = getBinImage(binType)
+                var dates = [new Date(element.next_date), new Date(element.further_dates[0])]
+                if (element.further_dates[1]) {
+                    dates.push(new Date(element.further_dates[1]));
+                }
+                dates.forEach(date => {
+                    var binObject = { type: binType, date: date, imageUrl: binImage };
+                    binArray.push(binObject);
+                });
             }
-            dates.forEach(date => {
-                var binObject = { type: binType, date: date, imageUrl: binImage };
-                binArray.push(binObject);
-            });
         });
 
         binArray.sort((a, b) => {
@@ -37,7 +38,7 @@ export function setBinCollection(binJSON, uprn) {
             element.date = getLongDate(element.date);
         });
 
-        
+
         return binArray;
     }
 }

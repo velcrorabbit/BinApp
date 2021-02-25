@@ -10,7 +10,9 @@ const resourcesToPrecache = [
     '../src/images/BlackBin.jpg',
     '../src/images/BlueBin.jpg',
     '../src/images/BrownBin.jpg',
-    '../src/images/GreenBin.jpg'
+    '../src/images/GreenBin.jpg',
+    '../src/images/MCCLogo.PNG',
+    '../src/images/settings.png'
 ];
 
 self.addEventListener('install', event => {

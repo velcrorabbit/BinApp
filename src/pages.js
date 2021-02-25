@@ -5,12 +5,13 @@ import binData from "./BinData/testData.json";
 import addressData from "./BinData/addresses.json"
 import * as BinDataFunctions from './BinDataFunctions.js';
 import MCCLogo from "./Images/MCCLogo.PNG";
+import settingsIcon from "./Images/settings.png";
 
 export function Heading() {
     return (
         <div className="header">
             <Link to="./"><img src={MCCLogo} alt="Manchester City Council" /></Link>
-            <Link to="YourInfo">Settings</Link>
+            <Link to="YourInfo"><img src={settingsIcon} alt="Settings" /></Link>
         </div>
     );
 }
@@ -19,11 +20,12 @@ export function Home() {
 
     const uprn = localStorage.getItem('uprn');
     
-    console.log("Uprn at start: " + uprn);
     if (uprn === "undefined") {
         return (
             <div>
-                <p>No bins found, please update your address in the settings</p>
+                <p>No bins found, please update your address in the settings</p><br />
+                {ReportAnIssue()}<br />
+                {recycling()}
             </div>
         )
     } else {
@@ -56,8 +58,6 @@ export function UserInfo() {
         });
     }
 
-    console.log("local storage:" + localStorage.getItem('uprn'));
-
     return (
         <div>
             <h2>Settings</h2>
@@ -67,6 +67,7 @@ export function UserInfo() {
                 <select name="address" id="address" onChange={handleChange}>
                 {displayAddressOptions(addressData)}
                 </select>
+                <button onClick={localStorage.setItem('uprn', "undefined")}>Clear data</button>
                 <h3>Notifications</h3>
                 <input type="checkbox" id="notificationOn" name="notificationOn"></input>
                 <label htmlFor="notificationOn">Turn on notifications the day before your collection</label><br />
@@ -79,10 +80,8 @@ export function UserInfo() {
 }
 
 function displayAddressOptions(addressData){
-    console.log(addressData);
     return <>
         {addressData.map(address => {
-            console.log(address.address);
             if (address.uprn == localStorage.getItem('uprn')) {
                 return <option value={address.uprn} selected>{address.address}</option>
             } else {
