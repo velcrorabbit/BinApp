@@ -7,6 +7,9 @@ import * as BinDataFunctions from './BinDataFunctions.js';
 import MCCLogo from "./Images/MCCLogo.PNG";
 import settingsIcon from "./Images/settings.png";
 
+/**
+ * Display a heading with navigation links and MCC Branding.
+ */
 export function Heading() {
     return (
         <div className="header">
@@ -16,6 +19,10 @@ export function Heading() {
     );
 }
 
+/**
+ * Display the home page. If a UPRN has not been set, it asks the user to update it in the settings.
+ * This is to avoid errors from null values.
+ */
 export function Home() {
 
     const uprn = localStorage.getItem('uprn');
@@ -40,34 +47,17 @@ export function Home() {
     }
 }
 
-const formReducer = (state, event) => {
-    return {
-        ...state,
-        [event.name]: event.value
-    }
-}
-
+/**
+ * Display the Settings Page with a form for the user to enter their details and preferences.
+ */
 export function UserInfo() {
-
-    const [formData, setFormData] = useReducer(formReducer, {});
-
-    const handleChange = event => {
-        setFormData({
-            name: event.target.name,
-            value: event.target.value,
-        });
-    }
 
     return (
         <div>
             <h2>Settings</h2>
-            <form name="settingsForm" onSubmit={(e) => { localStorage.setItem('uprn', formData.address); e.preventDefault(); }}>
+            <form name="settingsForm" onSubmit={(e) => { localStorage.setItem('uprn', document.getElementById("address").value); e.preventDefault(); }}>
                 <h3>Your Location</h3>
-                <label htmlFor="address">select Address:</label> <br />
-                <select name="address" id="address" onChange={handleChange}>
-                {displayAddressOptions(addressData)}
-                </select>
-                <button onClick={localStorage.setItem('uprn', "undefined")}>Clear data</button>
+                {displayAddressSelect(addressData)}
                 <h3>Notifications</h3>
                 <input type="checkbox" id="notificationOn" name="notificationOn"></input>
                 <label htmlFor="notificationOn">Turn on notifications the day before your collection</label><br />
@@ -75,22 +65,32 @@ export function UserInfo() {
                 <label htmlFor="time">Time of notification</label><br />
                 <button type="submit">Save Changes</button>
             </form>
+            <h3>Your Data</h3>
+            <button onClick={(e) => localStorage.setItem('uprn', "undefined")}>Clear data</button>
         </div>
     );
 }
 
-function displayAddressOptions(addressData){
+/**
+ * Create a dynamic address lookup that sets the default value to the currently selected UPRN
+ * Pulled out as a seperate function for neatness and also so it can be easily replaced by the GazOps API.
+ * @param addressData - A temporary JSON of the test addresses 
+ */
+function displayAddressSelect(addressData){
     return <>
+        <label htmlFor="address">select Address:</label> <br />
+        <select name="address" id="address" defaultValue={localStorage.getItem('uprn')}>
         {addressData.map(address => {
-            if (address.uprn == localStorage.getItem('uprn')) {
-                return <option value={address.uprn} selected>{address.address}</option>
-            } else {
-                return <option value={address.uprn}>{address.address}</option>;
-            }
+            return <option value={address.uprn}>{address.address}</option>;
         })}
+        </select>
     </>
 }
 
+/**
+ * Display the first collection listed in the JSON file.
+ * @param uprn 
+ */
 export function BinData(uprn) {
 
     //Production release will get the binJSON from the Biffa API call
@@ -108,6 +108,9 @@ export function BinData(uprn) {
     return UserInfo();
 }
 
+/**
+ * Display a page showing all future collections barring the first one.
+ */
 export function FutureCollections() {
 
     var {search} = useLocation();
@@ -121,6 +124,9 @@ export function FutureCollections() {
     );
 }
 
+/**
+ * Display a segment with links to the bin issue pages from the website.
+ */
 export function ReportAnIssue() {
     return (
         <div>
@@ -140,6 +146,10 @@ export function ReportAnIssue() {
     )
 }
 
+/**
+ * Display a link to information about what goes in each bin.
+ * Production version will have seperate pages for each bin linked from the bin images themselves.
+ */
 export function recycling() {
     return (
         <div>

@@ -1,12 +1,21 @@
 /* Font is specific to MCC, need to host internally to access */
+
+* {
+  background-color: #efefef;
+}
+
 .App {
   text-align: center;
   font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
+  line-height: 1.71428571em;
 }
 
 .header {
   background-color: black;
-  color: white;
+}
+
+.header a {
+  background-color: black;
 }
 
 h2 {
@@ -27,12 +36,56 @@ h3 {
   font-weight: normal ;
 }
 
+a {
+  color: #2B5E80;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #2B5E80;
+  font-weight: 500;
+}
+
+ul {
+  display: block;
+  list-style-type: disc;
+  padding: 0 0 0 7.14285714%;
+}
+
 ul, form {
   text-align: left;
 }
 
-input, label, select, button, h3 {
+input, label, button, h3 {
   margin-left: 5%;
+}
+
+select {
+  padding: 4px;
+  font-size: 100%;
+  margin: 0;
+  vertical-align: baseline;
+  align-items: flex-start;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  white-space: nowrap;
+  border-width: 1px;
+  border-style: solid;
+  border-image: initial;
+  border-radius: 2px;
+  font: 400 13.3333px Arial;
+}
+
+button {
+  background-color: #a62639;
+  border: 1px solid #a62639;
+  display: inline-block;
+  padding: .75rem 1rem;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px rgb(0 0 0 / 0%);
+  text-align: center;
+  font-size: 12px;
+  box-shadow: none;
+  color: #FFFFFF;
+  display: block;
 }
 
 .bin-image {
