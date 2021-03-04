@@ -54,14 +54,13 @@ ul, form {
   text-align: left;
 }
 
-input, label, button, h3 {
+input, label, button, select, h3 {
   margin-left: 5%;
 }
 
-select {
+select, input {
   padding: 4px;
   font-size: 100%;
-  margin: 0;
   vertical-align: baseline;
   align-items: flex-start;
   overflow-x: hidden;
@@ -72,6 +71,7 @@ select {
   border-image: initial;
   border-radius: 2px;
   font: 400 13.3333px Arial;
+  background-color: white;
 }
 
 button {
@@ -90,4 +90,10 @@ button {
 
 .bin-image {
   padding: 10px;
+}
+
+.banner {
+  background-color: #ffcd19;
+  color: black;
+  font-size: 20px;
 }

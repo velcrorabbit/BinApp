@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { Link, useLocation } from 'react-router-dom';
 import './App.css';
 import binData from "./BinData/testData.json";
@@ -48,6 +48,15 @@ export function Home() {
 }
 
 /**
+ * This segment can be added to the app.js file to add alerts if there is important information to send out.
+ */
+export function Alerts(){
+    
+    return <h2 className="banner">This is an alert that can be changed if needed</h2>
+
+}
+
+/**
  * Display the Settings Page with a form for the user to enter their details and preferences.
  */
 export function UserInfo() {
@@ -81,7 +90,7 @@ function displayAddressSelect(addressData){
         <label htmlFor="address">select Address:</label> <br />
         <select name="address" id="address" defaultValue={localStorage.getItem('uprn')}>
         {addressData.map(address => {
-            return <option value={address.uprn}>{address.address}</option>;
+            return <option value={address.uprn} key={address.uprn}>{address.address}</option>;
         })}
         </select>
     </>

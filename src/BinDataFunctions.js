@@ -10,7 +10,7 @@ export function setBinCollection(binJSON, uprn) {
     var locationObject = null;
 
     binJSON.forEach(location => {
-        if (location["uprn"] == uprn) {
+        if (location["uprn"] === uprn) {
             locationObject = location;
         }
     });
