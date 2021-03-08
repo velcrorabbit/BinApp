@@ -1,4 +1,4 @@
-/* Font is specific to MCC, need to host internally to access */
+/* General */
 
 * {
   background-color: #efefef;
@@ -6,16 +6,9 @@
 
 .App {
   text-align: center;
+  /* Font is specific to MCC and needs to be hosted internally */
   font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
   line-height: 1.71428571em;
-}
-
-.header {
-  background-color: black;
-}
-
-.header a {
-  background-color: black;
 }
 
 h2 {
@@ -23,8 +16,7 @@ h2 {
   color: white;
   text-align: center;
   margin: 0;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px;
   font-weight: normal;
 }
 
@@ -33,7 +25,8 @@ h3 {
   margin: 0;
   padding-top: 5px;
   padding-bottom: 5px;
-  font-weight: normal ;
+  font-weight: normal;
+  line-height: 50px;
 }
 
 a {
@@ -42,16 +35,21 @@ a {
   padding-bottom: 1px;
   border-bottom: 1px solid #2B5E80;
   font-weight: 500;
+  font-size: 20px;
+  line-height: 50px;
 }
 
 ul {
   display: block;
-  list-style-type: disc;
-  padding: 0 0 0 7.14285714%;
+  list-style: square url("./Images/icon_arrow.gif");
+  text-align: center;
 }
+
+/* Form */
 
 ul, form {
   text-align: left;
+  line-height: 40px;
 }
 
 input, label, button, select, h3 {
@@ -86,11 +84,41 @@ button {
   box-shadow: none;
   color: #FFFFFF;
   display: block;
+  font-size: 15px;
 }
+
+p {
+  text-align: left;
+  padding-left: 25px;
+}
+
+/* Header */
+
+.header {
+  background-color: black;
+  overflow: auto;
+}
+
+.header a {
+  background-color: black;
+}
+
+.header .logo {
+  float: left;
+}
+
+.header .settings {
+  float: right;
+  margin: 5px;
+}
+
+/* Images */
 
 .bin-image {
   padding: 10px;
 }
+
+/* Banner */
 
 .banner {
   background-color: #ffcd19;

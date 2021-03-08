@@ -13,8 +13,8 @@ import settingsIcon from "./Images/settings.png";
 export function Heading() {
     return (
         <div className="header">
-            <Link to="./"><img src={MCCLogo} alt="Manchester City Council" /></Link>
-            <Link to="YourInfo"><img src={settingsIcon} alt="Settings" /></Link>
+            <Link to="./"><img class="logo" src={MCCLogo} alt="Manchester City Council" /></Link>
+            <Link to="YourInfo"><img class="settings" src={settingsIcon} alt="Settings" /></Link>
         </div>
     );
 }
@@ -29,7 +29,7 @@ export function Home() {
     
     if (uprn === "undefined") {
         return (
-            <div>
+            <div data-testid="home no uprn">
                 <p>No bins found, please update your address in the settings</p><br />
                 {ReportAnIssue()}<br />
                 {recycling()}
@@ -37,11 +37,11 @@ export function Home() {
         )
     } else {
         return (
-            <div>
+            <div data-testid="home uprn">
                 {BinData(uprn)}<br />
                 <Link to={`/FutureCollections?uprn=${uprn}`}>See future collections</Link><br />
-                {ReportAnIssue()}<br />
-                {recycling()}
+                {recycling()}<br />
+                {ReportAnIssue()}
             </div>
         )
     }
@@ -65,16 +65,17 @@ export function UserInfo() {
         <div>
             <h2>Settings</h2>
             <form name="settingsForm" onSubmit={(e) => { localStorage.setItem('uprn', document.getElementById("address").value); e.preventDefault(); }}>
-                <h3>Your Location</h3>
+                <h3>Your location</h3>
                 {displayAddressSelect(addressData)}
                 <h3>Notifications</h3>
-                <input type="checkbox" id="notificationOn" name="notificationOn"></input>
-                <label htmlFor="notificationOn">Turn on notifications the day before your collection</label><br />
-                <input type="time" id="time" name="time"></input>
-                <label htmlFor="time">Time of notification</label><br />
+                <label htmlFor="notificationOn">Turn on notifications the day before your collection</label>
+                <input type="checkbox" id="notificationOn" name="notificationOn"></input><br />
+                <label htmlFor="time">Time of notification</label>
+                <input type="time" id="time" name="time"></input><br />
                 <button type="submit">Save Changes</button>
             </form>
-            <h3>Your Data</h3>
+            <h3>Your data</h3>
+            <p>Remove your saved address. Bin information will not be shown unless you select and save an address</p>
             <button onClick={(e) => localStorage.setItem('uprn', "undefined")}>Clear data</button>
         </div>
     );
@@ -87,8 +88,9 @@ export function UserInfo() {
  */
 function displayAddressSelect(addressData){
     return <>
-        <label htmlFor="address">select Address:</label> <br />
+        <label htmlFor="address">Select address:</label>
         <select name="address" id="address" defaultValue={localStorage.getItem('uprn')}>
+            <option value="undefined" key="undefined">None</option>
         {addressData.map(address => {
             return <option value={address.uprn} key={address.uprn}>{address.address}</option>;
         })}
@@ -149,6 +151,9 @@ export function ReportAnIssue() {
                 </li>
                 <li>
                     <a href="https://secure.manchester.gov.uk/forms/form/1615/en/report_an_abandoned_bin">Abandoned Bin</a>
+                </li>
+                <li>
+                    <a href="https://www.manchester.gov.uk/info/200084/bins_rubbish_and_recycling/6217/get_a_new_bin_box_or_recycling_bag">Order a bin, box or recycling bag </a>
                 </li>
             </ul>
         </div>

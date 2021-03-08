@@ -38,13 +38,12 @@ export function setBinCollection(binJSON, uprn) {
             element.date = getLongDate(element.date);
         });
 
-
         return binArray;
     }
 }
 
 // get an array of just the unique bin collection days
-function getArrayOfDates(binArray) {
+export function getArrayOfDates(binArray) {
     var binDates = [];
     binArray.forEach(element => {
         if (!binDates.includes(element.date)) {
@@ -77,6 +76,7 @@ export function getArrayOfBinByDate(binArray) {
 
 export function getFutureCollections(binArray) {
 
+    console.log(binArray[0]);
     var futureArray = binArray.slice(1);
 
     return <>
@@ -111,18 +111,29 @@ export function getFirstCollectionHTML(binArray) {
 }
 
 // change the date object into a more human-readable format
-function getLongDate(date) {
+export function getLongDate(date) {
 
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    var longDate = date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+    var weekday = new Array(7);
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+    
+    var day = weekday[date.getDay()];
+
+    var longDate = day + " " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
 
     return longDate;
 
 }
 
 // get the locations of the image for each bin
-function getBinImage(binType) {
+export function getBinImage(binType) {
 
     var imageLocation;
 
