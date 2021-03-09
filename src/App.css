@@ -8,7 +8,7 @@
   text-align: center;
   /* Font is specific to MCC and needs to be hosted internally */
   font-family: 'Helvetica Neue', 'Helvetica', sans-serif;
-  line-height: 1.71428571em;
+  line-height: 1.7em;
 }
 
 h2 {
@@ -43,6 +43,10 @@ ul {
   display: block;
   list-style: square url("./Images/icon_arrow.gif");
   text-align: center;
+}
+
+p {
+  margin-right: 5%;
 }
 
 /* Form */
@@ -116,6 +120,15 @@ p {
 
 .bin-image {
   padding: 10px;
+}
+
+.bin-info-images a {
+  border-bottom: none;
+}
+
+.bin-info-images img {
+  width: 15%;
+  margin: auto;
 }
 
 /* Banner */

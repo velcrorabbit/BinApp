@@ -1,11 +1,16 @@
 import React from "react";
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './App.css';
 import binData from "./BinData/testData.json";
 import addressData from "./BinData/addresses.json"
 import * as BinDataFunctions from './BinDataFunctions.js';
 import MCCLogo from "./Images/MCCLogo.PNG";
 import settingsIcon from "./Images/settings.png";
+import brownBinIcon from "./Images/BrownBin.jpg";
+import blackBinIcon from "./Images/BlackBin.jpg";
+import blueBinIcon from "./Images/BlueBin.jpg";
+import greenBinIcon from "./Images/GreenBin.jpg";
+
 
 /**
  * Display a heading with navigation links and MCC Branding.
@@ -24,9 +29,9 @@ export function Heading() {
  * This is to avoid errors from null values.
  */
 export function Home() {
-
-    const uprn = localStorage.getItem('uprn');
     
+    var uprn = localStorage.getItem('uprn');
+
     if (uprn === "undefined") {
         return (
             <div data-testid="home no uprn">
@@ -38,8 +43,8 @@ export function Home() {
     } else {
         return (
             <div data-testid="home uprn">
-                {BinData(uprn)}<br />
-                <Link to={`/FutureCollections?uprn=${uprn}`}>See future collections</Link><br />
+                {BinData()}<br />
+                <Link to={`/FutureCollections`}>See future collections</Link><br />
                 {recycling()}<br />
                 {ReportAnIssue()}
             </div>
@@ -89,7 +94,7 @@ export function UserInfo() {
 function displayAddressSelect(addressData){
     return <>
         <label htmlFor="address">Select address:</label>
-        <select name="address" id="address" defaultValue={localStorage.getItem('uprn')}>
+        <select data-testid="address select" name="address" id="address" defaultValue={localStorage.getItem('uprn')}>
             <option value="undefined" key="undefined">None</option>
         {addressData.map(address => {
             return <option value={address.uprn} key={address.uprn}>{address.address}</option>;
@@ -100,23 +105,13 @@ function displayAddressSelect(addressData){
 
 /**
  * Display the first collection listed in the JSON file.
- * @param uprn 
  */
-export function BinData(uprn) {
+export function BinData() {
 
     //Production release will get the binJSON from the Biffa API call
     //The UPRN will come from a GazOPs API lookup.
     //https://www.manchester.gov.uk/site/custom_scripts/bin_dates_gazops/index.php?uprn=000077074250
-    if (uprn) {
-
-        var HTML = BinDataFunctions.getFirstCollectionHTML(BinDataFunctions.setBinCollection(binData, uprn));
-
-        return <>
-            {HTML}
-        </>
-
-    }
-    return UserInfo();
+    return BinDataFunctions.getFirstCollectionHTML(BinDataFunctions.setBinCollection(binData));
 }
 
 /**
@@ -124,13 +119,9 @@ export function BinData(uprn) {
  */
 export function FutureCollections() {
 
-    var {search} = useLocation();
-    var uprn = search.slice(6, search.length);
-
-    return (
-        <>
+    return (<>
             <h2>Future Collections</h2>
-            {BinDataFunctions.getFutureCollections(BinDataFunctions.getArrayOfBinByDate(BinDataFunctions.setBinCollection(binData, uprn)))}
+            {BinDataFunctions.getFutureCollections(BinDataFunctions.getArrayOfBinByDate(BinDataFunctions.setBinCollection(binData)))}
         </>
     );
 }
@@ -166,9 +157,100 @@ export function ReportAnIssue() {
  */
 export function recycling() {
     return (
-        <div>
+        <div class="bin-info-images">
             <h2>What goes in each bin?</h2>
-            <a href="https://www.manchester.gov.uk/info/200084/bins_rubbish_and_recycling/6026/see_which_recycling_bin_to_use">See which recycling bin to use</a>
+            <Link to="./GreenBinContents"><img class="bin-image" src={greenBinIcon} alt="Green Bin" /></Link>
+            <Link to="./BlackBinContents"><img class="bin-image" src={blackBinIcon} alt="Black Bin" /></Link>
+            <Link to="./BrownBinContents"><img class="bin-image" src={brownBinIcon} alt="Brown Bin" /></Link>
+            <Link to="./BlueBinContents"><img class="bin-image" src={blueBinIcon} alt="Blue Bin" /></Link>
+        </div>
+    )
+}
+
+export function GreenBinContents() {
+    return (
+        <div>
+            <h2>Green Bin</h2>
+            <p>Food waste should be put in compostable bags first.</p>
+            <ul>
+                <li>Meat and fish bones</li>
+                <li>twigs and branches</li>
+                <li>cooked and raw meat</li>
+                <li>bread products</li>
+                <li>fruit and veg peelings</li>
+                <li>tea bags</li>
+                <li>plate scrapings</li>
+                <li>cut flowers</li>
+                <li>dairy products and egg shells</li>
+                <li>grass cuttings and hedge clippings</li>
+            </ul>
+        </div>
+    )
+}
+
+export function BlackBinContents() {
+    return (
+        <div>
+            <h2>Black Bin</h2>
+            <ul>
+                <li>Nappies</li>
+                <li>coffee cups</li>
+                <li>polystyrene</li>
+                <li>bottle tops</li>
+                <li>plant pots</li>
+                <li>plastic food trays</li>
+                <li>plastic bags</li>
+                <li>plastic film</li>
+                <li>bubble wrap</li>
+            </ul>
+        </div>
+    )
+}
+
+export function BrownBinContents() {
+    return (
+        <div>
+            <h2>Brown Bin</h2>
+            <ul>
+                <li>Plastic bottles including shampoo bottles</li>
+                <li>bleach bottles</li>
+                <li>mouthwash bottles</li>
+                <li>drinks bottles</li>
+                <li>washing up liquid bottles</li>
+                <li>milk bottles</li>
+                <li>foil and foil trays</li>
+                <li>empty aerosols</li>
+                <li>food tins</li>
+                <li>drinks cans</li>
+                <li>glass bottles</li>
+                <li>glass jars</li>
+            </ul>
+        </div>
+    )
+}
+
+export function BlueBinContents() {
+    return (
+        <div>
+            <h2>Blue Bin</h2>
+            <p>Please ensure you crush down boxes and large bits of cardboard to fit as much in your bins as possible.</p>
+            <ul>
+                <li>Cardboard</li>
+                <li>food and drink cartons</li>
+                <li>magazines</li>
+                <li>comics</li>
+                <li>waste paper</li>
+                <li>newspapers</li>
+                <li>cardboard egg boxes</li>
+                <li>pizza boxes</li>
+                <li>juice boxes</li>
+                <li>travel tickets (for bus, tram, train)</li>
+                <li>cards</li>
+                <li>flyers</li>
+                <li>leaflets</li>
+                <li>pamphlets</li>
+                <li>catalogues</li>
+            </ul>
         </div>
     )
 }

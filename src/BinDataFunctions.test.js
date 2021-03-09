@@ -1,7 +1,3 @@
-import brownBinIcon from "./Images/BrownBin.jpg";
-import blackBinIcon from "./Images/BlackBin.jpg";
-import blueBinIcon from "./Images/BlueBin.jpg";
-import greenBinIcon from "./Images/GreenBin.jpg";
 import * as BinDataFunctions from './BinDataFunctions.js';
 import binData from "./BinData/testData.json";
 
@@ -20,40 +16,10 @@ const binArray = [
   { type: 'Blue Bin', date: 'Wednesday 20 January 2021', imageUrl: 'BlueBin.jpg' }
 ];
 
-const uprn = "77074250";
-
-test('getLongDate', () => {
-  var date = new Date("2020-12-16")
-  expect(BinDataFunctions.getLongDate(date)).toBe("Wednesday 16 December 2020");
-});
-
-test('brown getBinImage', () => {
-  var binType = "Brown Bin"
-  expect(BinDataFunctions.getBinImage(binType)).toBe(brownBinIcon);
-});
-
-test('blue getBinImage', () => {
-  var binType = "Blue Bin"
-  expect(BinDataFunctions.getBinImage(binType)).toBe(blueBinIcon);
-});
-
-test('black getBinImage', () => {
-  var binType = "Black \/ Grey Bin"
-  expect(BinDataFunctions.getBinImage(binType)).toBe(blackBinIcon);
-});
-
-test('green getBinImage', () => {
-  var binType = "Green Bin"
-  expect(BinDataFunctions.getBinImage(binType)).toBe(greenBinIcon);
-});
-
-test('green getBinImage', () => {
-  var binType = "Green Bin"
-  expect(BinDataFunctions.getBinImage(binType)).toBe(greenBinIcon);
-});
+localStorage.setItem('uprn', "77074250");
 
 test('setBinCollection', () => {
-  expect(BinDataFunctions.setBinCollection(binData, uprn)).toStrictEqual(binArray);
+  expect(BinDataFunctions.setBinCollection(binData)).toStrictEqual(binArray);
 });
 
 test('getArrayOfDates', () => {

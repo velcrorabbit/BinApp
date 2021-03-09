@@ -3,9 +3,14 @@ import blackBinIcon from "./Images/BlackBin.jpg";
 import blueBinIcon from "./Images/BlueBin.jpg";
 import greenBinIcon from "./Images/GreenBin.jpg";
 
-// get the needed bin data from the JSON Biffa has provided.
-export function setBinCollection(binJSON, uprn) {
+/**
+ * Take the required information from the Biffa JSON
+ * @param binJSON - currently test data, will be API data
+ * @returns - And array of bin collections containing the relevant data
+ */
+export function setBinCollection(binJSON) {
 
+    var uprn = localStorage.getItem('uprn');
     var binArray = [];
     var locationObject = null;
 
@@ -29,7 +34,7 @@ export function setBinCollection(binJSON, uprn) {
                 });
             }
         });
-
+ 
         binArray.sort((a, b) => {
             return a.date - b.date;
         })
@@ -42,7 +47,10 @@ export function setBinCollection(binJSON, uprn) {
     }
 }
 
-// get an array of just the unique bin collection days
+/**
+ * @param binArray
+ * @returns an array of the unique dates from the collections array
+ */
 export function getArrayOfDates(binArray) {
     var binDates = [];
     binArray.forEach(element => {
@@ -53,7 +61,10 @@ export function getArrayOfDates(binArray) {
     return binDates;
 }
 
-// create an array of bin dates with each bin collected on that date as an object in a nested array.
+/**
+ * @param binArray 
+ * @returns nested array of each unique date in the bin array with the relevant bins.
+ */
 export function getArrayOfBinByDate(binArray) {
     var dateArray = getArrayOfDates(binArray);
     var binArrayByDate = [];
@@ -73,7 +84,10 @@ export function getArrayOfBinByDate(binArray) {
     });
     return binArrayByDate;
 }
-
+/**
+ * @param binArray 
+ * @returns The HTML for the future collections page
+ */
 export function getFutureCollections(binArray) {
 
     console.log(binArray[0]);
@@ -92,7 +106,10 @@ export function getFutureCollections(binArray) {
     </>
 }
 
-// get the html for the first collection in the list that will display on the first page.
+/**
+ * @param binArray 
+ * @returns The HTML for the first collection in the list that will be displayed on the home page
+ */
 export function getFirstCollectionHTML(binArray) {
 
     var rowDate = binArray[0].date;
@@ -110,19 +127,15 @@ export function getFirstCollectionHTML(binArray) {
 
 }
 
-// change the date object into a more human-readable format
-export function getLongDate(date) {
+/**
+ * @param date object.
+ * @returns the date in long format Weekday, date, month, year
+ */
+function getLongDate(date) {
 
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    var weekday = new Array(7);
-    weekday[0] = "Sunday";
-    weekday[1] = "Monday";
-    weekday[2] = "Tuesday";
-    weekday[3] = "Wednesday";
-    weekday[4] = "Thursday";
-    weekday[5] = "Friday";
-    weekday[6] = "Saturday";
+    var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     
     var day = weekday[date.getDay()];
 
@@ -132,8 +145,11 @@ export function getLongDate(date) {
 
 }
 
-// get the locations of the image for each bin
-export function getBinImage(binType) {
+/**
+ * @param binType from array
+ * @returns location of the image for that bin type
+ */
+function getBinImage(binType) {
 
     var imageLocation;
 
