@@ -9,8 +9,13 @@ The code in this repo is a protoype for a PWA that can be used to take the JSON 
 ## To Do
 
 •	Host on a secure internal server
+
 •	Replace font with the specially designed one from the website
+
 •	Replace Address lookup with GazOps API
+
 •	Integrate with Biffa API
+
 •	Replace images with properly sized and branded ones from the style team
+
 •	Develop Notifications
